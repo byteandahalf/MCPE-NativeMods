@@ -107,13 +107,13 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
 
 	Mouse$getX = (int (*)(Mouse*)) dlsym(handle, "_ZN11MouseDevice4getXEv");
 	Mouse$getY = (int (*)(Mouse*)) dlsym(handle, "_ZN11MouseDevice4getYEv");
-    Mouse$isButtonDown = (bool (*)(Mouse*, int)) dlsym(handle, "_ZN11MouseDevice12isButtonDownEi");
-    Mouse$_instance = (Mouse*) dlsym(handle, "_ZN5Mouse9_instanceE");
+    	Mouse$isButtonDown = (bool (*)(Mouse*, int)) dlsym(handle, "_ZN11MouseDevice12isButtonDownEi");
+	Mouse$_instance = (Mouse*) dlsym(handle, "_ZN5Mouse9_instanceE");
 	Gui$getSlotIdAt = (int (*)(Gui*, int, int)) dlsym(handle, "_ZN3Gui11getSlotIdAtEii");
 	Player$drop = (void (*)(Player*, ItemInstance*)) dlsym(handle, "_ZN6Player4dropEPK12ItemInstance");
 	//Level$playSound = (void (*)(Level*, Player*, std::string const&, float, float)) dlsym(handle, "_ZN5Level9playSoundEP5EntityRKSsff");
 	FillingContainer$replaceSlot = (void (*)(void*, int, ItemInstance*)) dlsym(handle, "_ZN16FillingContainer11replaceSlotEiP12ItemInstance");
-    FillingContainer$clearSlot = (void (*)(void*, int)) dlsym(handle, "_ZN16FillingContainer9clearSlotEi");
+    	FillingContainer$clearSlot = (void (*)(void*, int)) dlsym(handle, "_ZN16FillingContainer9clearSlotEi");
   	FillingContainer$getItem = (ItemInstance* (*)(void*, int)) dlsym(handle, "_ZN16FillingContainer7getItemEi");
 
 	void* gui$tickItemDrop = dlsym(handle, "_ZN3Gui12tickItemDropEv");

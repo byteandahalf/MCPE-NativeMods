@@ -11,29 +11,34 @@ typedef void Mouse;
 
 typedef void Level;
 typedef struct {
-     char filler[104]; // 0
-     Level* level; // 104
+     char filler[244]; // 0
+     Level* level; // 244
 } MinecraftClient;
 
 typedef struct {
-     char filler[2616]; // 0
-     MinecraftClient& mc; // 2616
+     char filler[372]; // 0
+     MinecraftClient& mc; // 372
 } Gui;
 
 typedef struct {
-	int count; // 0
-	int data; // 4
-	void* item; // 8
+	short count; // 0
+	short data; // 2
+	void* item; // 4
+	void* tile; // 8
+	bool b1;
+	bool b2;
+	bool b3;
+	bool b4;
 } ItemInstance;
 
 typedef struct {
-	char filler[40]; // 0
-	int selectedslot; // 40
+	char filler[32]; // 0
+	int selectedslot; // 32
 } Inventory;
 
 typedef struct {
-	char filler[3212]; // 0
-	Inventory* inv; // 3212
+	char filler[3256]; // 0
+	Inventory* inv; // 3256
 } Player;
 
 
@@ -58,7 +63,7 @@ static void (*FillingContainer$clearSlot)(void*, int);
 static ItemInstance* (*FillingContainer$getItem)(void*, int);
 
 static void (*_Gui$tickItemDrop)(Gui*);
-static void (*_Player$Player)(Player*, void*, bool);
+static void (*_Player$Player)(Player*, void*, void*, bool, void*);
 
 
 void Gui$tickItemDrop(Gui* gui) {
@@ -96,9 +101,9 @@ void Gui$tickItemDrop(Gui* gui) {
 	}
 }
 
-void Player$Player(Player* player, void* level, bool hi) {
+void Player$Player(Player* player, void* level, void* packetsender, bool b, void* raknet) {
 	player_inst = player; // Used to get our Player instance
-	_Player$Player(player, level, hi);
+	_Player$Player(player, level, packetsender, b, raknet);
 }
 
 
@@ -119,7 +124,7 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
 	void* gui$tickItemDrop = dlsym(handle, "_ZN3Gui12tickItemDropEv");
 	MSHookFunction(gui$tickItemDrop, (void*) &Gui$tickItemDrop, (void**) &_Gui$tickItemDrop);
 
-	void* player$Player = dlsym(handle, "_ZN6PlayerC2ER5Levelb");
+	void* player$Player = dlsym(handle, "_ZN6PlayerC2ER5LevelR12PacketSenderbRKN6RakNet10RakNetGUIDE");
 	MSHookFunction(player$Player, (void*) &Player$Player, (void**) &_Player$Player);
 
 	return JNI_VERSION_1_2;

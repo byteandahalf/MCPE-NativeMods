@@ -14,6 +14,8 @@
     <!-- metadata specifying the library name. must match Android.mk.-->
     <meta-data android:name="net.zhuoweizhang.mcpelauncher.api.nativelibname"
         android:value="com.byteandahalf.betterdrops"/>
+        
+    <meta-data android:name="net.zhuoweizhang.mcpelauncher.api.targetmcpeversion" android:value="0.11.0"/>
     </application>
 
 </manifest> 

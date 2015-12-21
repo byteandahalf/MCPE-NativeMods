@@ -15,7 +15,7 @@
     <meta-data android:name="net.zhuoweizhang.mcpelauncher.api.nativelibname"
         android:value="com.byteandahalf.betterdrops"/>
         
-    <meta-data android:name="net.zhuoweizhang.mcpelauncher.api.targetmcpeversion" android:value="0.11.0"/>
+    <meta-data android:name="net.zhuoweizhang.mcpelauncher.api.targetmcpeversion" android:value="0.13.0"/>
     </application>
 
 </manifest> 

@@ -12,32 +12,41 @@
 #include "mcpe/Inventory.h"
 #include "mcpe/ItemInstance.h"
 
-struct DropDelay {
+struct DropDelayTimer {
 	int8_t _delay;
+	int NEXTDELAY;
+	bool STOP;
 	
-	DropDelay() {
-		_delay = 15;
+	DropDelayTimer() {
+		reset();
 	}
 	
-	const DropDelay& operator=(const int& delay) {
-		_delay = delay;
-		return *this;
-	}
-	
-	const DropDelay& operator--() {
-		if(_delay > 1)
-			--_delay;
+	const DropDelayTimer& operator--() {
+		--_delay;
 			
 		return *this;
 	}
 	
-	operator int() const {
-		return _delay;
+	void reset() {
+		_delay = NEXTDELAY = 15;
+		STOP = false;
+	}
+	
+	void proceed() {
+		if(NEXTDELAY > 1)
+			_delay = --NEXTDELAY;
+	}
+	
+	void stop() {
+		STOP = true;
+	}
+	
+	operator bool() const {
+		return _delay > 0 || STOP;
 	}
 };
 
-static int slotTick = 15;
-static DropDelay delay;
+static DropDelayTimer slotTick;
 static bool stop = false;
 
 void (*_Gui$_tickItemDrop)(Gui*);
@@ -48,7 +57,7 @@ void Gui$_tickItemDrop(Gui* gui) {
 		if(touchedSlot == gui->minecraft.getLocalPlayer()->inventory->getSelectedSlot())
 		{
 			--slotTick;
-			if(slotTick == 0 && !stop)
+			if(!slotTick)
 			{
 				ItemInstance* itemStack = gui->minecraft.getLocalPlayer()->inventory->getItem(touchedSlot);
 				if(!itemStack)
@@ -62,17 +71,16 @@ void Gui$_tickItemDrop(Gui* gui) {
 				if(itemStack->count == 0)
 				{
 					gui->minecraft.getLocalPlayer()->inventory->clearSlot(touchedSlot);
-					stop = true;
+					slotTick.stop();
 				}
 
-				slotTick = --delay;
+				slotTick.proceed();
 			}
 		}
 	}
 	else
 	{
-		slotTick = delay = 15;
-		stop = false;
+		slotTick.reset();
 	}
 }
 

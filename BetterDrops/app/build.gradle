@@ -1,0 +1,49 @@
+apply plugin: 'com.android.model.application'
+
+model {
+    android {
+        compileSdkVersion = 23
+        buildToolsVersion = "23.0.2"
+
+        defaultConfig.with {
+            applicationId = "com.byteandahalf.betterdrops"
+            minSdkVersion.apiLevel = 4
+            targetSdkVersion.apiLevel = 10
+        }
+    }
+
+    /*
+     * native build settings
+     */
+    android.ndk {
+        moduleName = "com.byteandahalf.betterdrops"
+        /*
+         * Other ndk flags configurable here are
+         * cppFlags.add("-fno-rtti")
+         * cppFlags.add("-fno-exceptions")
+         * ldLibs.addAll(["android", "log"])
+         * stl       = "system"
+         */
+        ldLibs.addAll(["log", "dl", "minecraftpe", "mcpelauncher_tinysubstrate"])
+//        cFlags.add("-O2")
+//        cFlags.add("-std=gnu99")
+        cppFlags.add("-std=c++11")
+        stl "gnustl_shared"
+    }
+    android.buildTypes {
+        release {
+            minifyEnabled = false
+            proguardFiles.add(file('proguard-rules.txt'))
+        }
+    }
+    android.productFlavors {
+        // for detailed abiFilter descriptions, refer to "Supported ABIs" @
+        // https://developer.android.com/ndk/guides/abis.html#sa
+        create("arm7") {
+            ndk.abiFilters.add("armeabi-v7a")
+            ndk.ldFlags.add("-L${file('src/main/jniLibs2/armeabi-v7a')}".toString())
+        }
+        // To include all cpu architectures, leaves abiFilters empty
+        create("all")
+    }
+}

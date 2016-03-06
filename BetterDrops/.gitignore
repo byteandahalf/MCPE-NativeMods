@@ -2,3 +2,8 @@ gen/
 libs/
 bin/
 obj/
+.idea
+*.iml
+.gradle
+app/build
+local.properties
